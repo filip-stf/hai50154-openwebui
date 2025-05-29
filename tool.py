@@ -2,13 +2,45 @@ import os
 import requests
 from datetime import datetime
 from pydantic import BaseModel, Field
+from tools.supabase_tool import SupabaseTool
 
 
 class Tools:
     def __init__(self):
+        self.supabase_tool = SupabaseTool()
         pass
 
     # Add your custom tools using pure Python code here, make sure to add type hints and descriptions
+
+    # Dodane metody dla Supabase
+    def get_data_from_supabase(
+        self, table_name: str = Field(..., description="Nazwa tabeli w Supabase")
+    ) -> str:
+        """
+        Pobierz dane z określonej tabeli w Supabase.
+        """
+        return self.supabase_tool.get_data_from_table(table_name)
+
+    def insert_into_supabase(
+        self,
+        table_name: str = Field(..., description="Nazwa tabeli w Supabase"),
+        data: dict = Field(..., description="Dane do zapisania w formacie JSON"),
+    ) -> str:
+        """
+        Wstaw nowe dane do określonej tabeli w Supabase.
+        """
+        return self.supabase_tool.insert_into_table(table_name, data)
+
+    def update_in_supabase(
+        self,
+        table_name: str = Field(..., description="Nazwa tabeli w Supabase"),
+        id_value: str = Field(..., description="Wartość ID rekordu do aktualizacji"),
+        data: dict = Field(..., description="Dane do aktualizacji w formacie JSON"),
+    ) -> str:
+        """
+        Aktualizuj dane w określonej tabeli w Supabase.
+        """
+        return self.supabase_tool.update_in_table(table_name, id_value, data)
 
     def get_user_name_and_email_and_id(self, __user__: dict = {}) -> str:
         """
